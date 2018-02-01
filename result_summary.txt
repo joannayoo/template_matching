@@ -1,1 +1,19 @@
+2018/01/25
 이 테스트는 이미지 scale을 바꿔가며 TM_CCOEFF, TM_CCOEFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_SQDIFF, TM_SQDIFF_NORMED 등 opencv에서 제공하는 template matching 방법으로 미국 $100 화폐 매칭을 수행했다. 테스트 결과, TM_CCORR 방법이 가장 효과적으로 bill detection을 수행했고, TM_CCORR도 꽤 좋은 성능을 보어주었다. TM_SQDIFF는 성능이 떨어지는 것으로 나타났다. template과 이미지 속 화폐의 크기가 거의 같아서, scale은 비슷한 1.1이 적정한 것으로 나타났다.
+
+2018/02/01
+
+[ ] Performance test / Real env test 모두 지원 -> real env test 지원
+[*] Class 만들어서 모든 기능 처리
+[*] argparse 사용
+[ ] ini format file을 사용한 input parameter는 configparse 사용
+[*] Result를 숫자로 보기 - maxVal/minVal을 사용하지만, 정확하지 않음
+[*] 처리 시간 출력
+[*] Template 폴더
+[*] 테스트 이미지 모으기
+
+가장 큰 이슈: cv.matchTemplate과 cv.minMaxLoc에서 주는 maxVal, minVal이 performance를 측정하는 좋은 metric이 아니다. 그 이미지 로컬에서 max/min value를 제공하기 때문에 이미지들 사이에서 가장 performance 가 좋은 스케일 등을 출력해주지 않는다.
+
+potential solution:
+1) sift 등 scale invariant 한 디텍션을 먼저 사용해 빌 부분을 자르고, 템플릿 크기와 같게 만든 후 그 후에 템플렛 매칭을 한다 ..
+2) normalize() function을 쓴다. -> 리서치 결과, 에러가 많이 나고, 1, 0, -1 등 extreme value들이 많이 나옴 
