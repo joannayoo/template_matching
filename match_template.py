@@ -103,10 +103,10 @@ class BillTemplate:
         bl = corners[np.argmax(dist_2)]
         br = corners[np.argmax(dist_1)]
 
-        cv.circle(draw_cont, (tl[1], tl[0]), 3, (0,0,255), -1)
-        cv.circle(draw_cont, (tr[1], tr[0]), 3, (0,0,255), -1)
-        cv.circle(draw_cont, (bl[1], bl[0]), 3, (0,0,255), -1)
-        cv.circle(draw_cont, (br[1], br[0]), 3, (0,0,255), -1)
+        # cv.circle(draw_cont, (tl[1], tl[0]), 3, (0,0,255), -1)
+        # cv.circle(draw_cont, (tr[1], tr[0]), 3, (0,0,255), -1)
+        # cv.circle(draw_cont, (bl[1], bl[0]), 3, (0,0,255), -1)
+        # cv.circle(draw_cont, (br[1], br[0]), 3, (0,0,255), -1)
         # cv.imwrite('/home/joannayoo/venv/template_matching/step_10.jpg', draw_cont) #TODO
         rect = np.array([tl, tr, br, bl], dtype = "float32")
         rect[:,[0,1]] = rect[:,[1,0]]
@@ -149,89 +149,7 @@ class BillTemplate:
         print("The image is matched to " + best_match +  ". It took " + str(elapsed_time) + " seconds.")
 
         return best_match, elapsed_time
-        '''
-        lines = cv.HoughLines(cont_gray, 1, np.pi/180, 200)
-        #print(lines)
-        for i in range(len(lines)):
-            for rho, theta in lines[i]:
-                a = np.cos(theta)
-                b = np.sin(theta)
-                x0 = a*rho
-                y0 = b*rho
-                x1 = int(x0 + 200*(-b))
-                y1 = int(x0 + 200*(a))
-                x2 = int(x0 - 200*(-b))
-                y2 = int(x0 - 200*(a))
-                cv.line(draw_cont, (x1,y1),(x2,y2), (0,0,255), 5)
-        cv.imwrite('/home/joannayoo/venv/template_matching/step_8.jpg', draw_cont) #TODO
 
-        #blur = cv.GaussianBlur(draw_cont, (3,3), 0)
-        
-
-        
-        rect = cv.minAreaRect(our_c)
-        box = cv.boxPoints(rect)
-        box = np.int0(box)
-        cv.drawContours(im_copy, [box], 0, (0,0, 255) , 5)
-        
-        L = tuple(our_c[our_c[:, :, 0].argmin()][0])
-        print(L) 
-        R = tuple(our_c[our_c[:, :, 0].argmax()][0])
-        U = tuple(our_c[our_c[:, :, 1].argmin()][0])
-        D = tuple(our_c[our_c[:, :, 1].argmax()][0])
-        pts = [L, R, U, D]
-        cv.circle(im_copy, L, 10, (0,0,255),-1)
-        cv.circle(im_copy, R, 10, (0,0,255),-1)
-        cv.circle(im_copy, U, 10, (0,0,255),-1)
-        cv.circle(im_copy, D, 10, (0,0,255),-1)
-        
-    
-        x,y,w,h = cv.boundingRect(c)
-        cv.rectangle(im_copy, (x,y), (x + w, y + h), (0,255,0), 5)
-        
-        c = max(cnts, key = cv.arcLength)
-        cv.drawContours(im_copy, [c], -1, (0,255,0),5)
-        
-        
-        #extraction method 1 : contour detection
-        
-        #kernel=cv.getStructuringElement(cv.MORPH_RECT, (15,15))
-        #img = cv.morphologyEx(img, cv.MORPH_CLOSE, kernel)
-        cv.imwrite('/home/joannayoo/venv/template_matching/step_3.jpg', img) #TODO
-        img2, contours, hier = cv.findContours(img, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-        cv.drawContours(self.image, contours, -1, (0,255,0), 10)
-       
-        for c in contours:
-            peri = cv.arcLength(c, True)
-            approx = cv.approxPolyDP(c, 0.02*peri, True)
-            if len(approx) == 4:
-                cv.drawContours(img, [approx], -1, (0,255,0), 5)
-    
-        cv.imwrite('/home/joannayoo/venv/template_matching/step_4.jpg', img) #TODO
-        
-        
-        #extraction metod 2 : Hough Transform
-        img = cv.cvtColor(self.image, cv.COLOR_BGR2GRAY)
-        cv.imwrite('/home/joannayoo/venv/template_matching/step_1.jpg', img) #TODO
-        img = cv.GaussianBlur(img, (3,3), 0)
-        img = cv.Canny(img, 50,250)
-        cv.imwrite('/home/joannayoo/venv/template_matching/step_2.jpg', img) #TODO
-
-        lines = cv.HoughLines(img, 1, np.pi/180, 200)
-        print(lines[0])
-        for i in range(len(lines)):
-            for rho,theta in lines[i]:
-                a = np.cos(theta)
-                b = np.sin(theta)
-                x0 = a*rho
-                y0 = b*rho
-                x1 = int(x0 + 200*(-b))
-                y1 = int(x0 + 200*(a))
-                x2 = int(x0 - 200*(-b))
-                y2 = int(x0 - 200*(a))
-                cv.line(self.image, (x1,y1),(x2,y2), (0,0,255), 5)
-        cv.imwrite('/home/joannayoo/venv/template_matching/step_3.jpg', self.image) #TODO
-        '''
     def scale_and_match(self, scale, disp_match):
         start = time.time()
         
